@@ -97,7 +97,7 @@ function ItemDetails() {
 											prev === allImages.length - 1 ? 0 : prev + 1,
 										)
 									}
-									className='absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-transparent hover:bg-gray-100 rounded-full transition-colors'>
+									className='absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors'>
 									<svg
 										className='w-4 h-4 text-gray-700'
 										fill='none'

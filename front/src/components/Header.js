@@ -115,7 +115,7 @@ function Header() {
 			{renderUserActions()}
 
 			<button
-				className='md:hidden !bg-transparent !text-black !p-0'
+				className='md:hidden ml-auto !bg-transparent !text-black !p-0'
 				onClick={() => setIsMenuOpen(true)}>
 				<Menu size={28} />
 			</button>
