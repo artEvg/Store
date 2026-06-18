@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  
+}
+
+h3{
+  font-size: 28px;
+  
+  position: relative;
+  font-weight: bold;
+
+}
+h3::before{
+position: absolute;
+content: "";
+bottom: -2px;
+left: 0;
+background-color: #F86D72;
+height: 5px;
+width: 140px;
+}
+
+button {
+  background: #F86D72;
+  color: white;
+  border-radius: 17px;
+  padding: 10px 16px;
+  min-width: 100px;
+  transition: 0.3s all;
+}
+button:hover{
+  background:#dd6165
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
