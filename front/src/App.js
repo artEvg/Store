@@ -1,4 +1,3 @@
-import logo from "./logo.svg"
 import "./App.css"
 import Header from "./components/Header"
 import Home from "./pages/Home"
@@ -13,92 +12,83 @@ import AdminOrders from "./components/admin/AdminOrders"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import ItemDetails from "./pages/ItemDetails"
-import { AuthProvider } from "./auth/AuthContext"
-import { CartProvider } from "./auth/CartContext"
 import CartPage from "./pages/CartPage"
 import ProfileOrders from "./pages/ProfileOrders"
 import UpdateItem from "./components/admin/UpdateItem"
 import DiscountPercent from "./components/DiscountPercent"
-
-// import OnSaleProducts from "./components/OnSaleProducts";
 import Footer from "./components/Footer"
+
 function App() {
 	const location = useLocation()
-
 	const hideHeader = /^\/admin(\/|$)/.test(location.pathname)
+
 	return (
-		<AuthProvider>
-			<CartProvider>
-				{!hideHeader && <Header key={location.pathname} />}
-
-				<Routes>
+		<>
+			{!hideHeader && <Header />}
+			<Routes>
+				<Route
+					path='/'
+					element={<Home />}
+				/>
+				<Route
+					path='/catalog'
+					element={<Catalog />}
+				/>
+				<Route
+					path='/contacts'
+					element={<Contacts />}
+				/>
+				<Route
+					path='/about'
+					element={<About />}
+				/>
+				<Route
+					path='/login'
+					element={<Login />}
+				/>
+				<Route
+					path='/signup'
+					element={<Signup />}
+				/>
+				<Route
+					path='/cart'
+					element={<CartPage />}
+				/>
+				<Route
+					path='/orders'
+					element={<ProfileOrders />}
+				/>
+				<Route
+					path='/discount'
+					element={<DiscountPercent />}
+				/>
+				<Route
+					path='/itemDetails/:id'
+					element={<ItemDetails />}
+				/>
+				<Route
+					path='/admin'
+					element={<AdminLayout />}>
 					<Route
-						path='/'
-						element={<Home />}
+						path='add-item'
+						element={<AddItem />}
 					/>
 					<Route
-						path='/catalog'
-						element={<Catalog />}
+						path='orders'
+						element={<AdminOrders />}
 					/>
 					<Route
-						path='/contacts'
-						element={<Contacts />}
+						index
+						element={<AllItems />}
 					/>
 					<Route
-						path='/about'
-						element={<About />}
+						path='update-item/:id'
+						element={<UpdateItem />}
 					/>
-					<Route
-						path='/login'
-						element={<Login />}
-					/>
-					<Route
-						path='/signup'
-						element={<Signup />}
-					/>
-					<Route
-						path='/cart'
-						element={<CartPage />}
-					/>
-					<Route
-						path='/orders'
-						element={<ProfileOrders />}
-					/>
-
-					<Route
-						path='/discount'
-						element={<DiscountPercent />}
-					/>
-					<Route
-						path='/itemDetails/:id'
-						element={<ItemDetails />}
-					/>
-
-					<Route
-						path='/admin'
-						element={<AdminLayout />}>
-						<Route
-							path='add-item'
-							element={<AddItem />}
-						/>
-						<Route
-							path='orders'
-							element={<AdminOrders />}
-						/>
-						<Route
-							index
-							element={<AllItems />}
-						/>
-						<Route
-							path='/admin/update-item/:id'
-							element={<UpdateItem />}
-						/>
-					</Route>
-				</Routes>
-
-				<Footer />
-			</CartProvider>
-		</AuthProvider>
+				</Route>
+			</Routes>
+			<Footer />
+		</>
 	)
 }
 

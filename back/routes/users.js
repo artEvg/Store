@@ -49,42 +49,44 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const { password, email } = req.body;
+	const { password, email } = req.body
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Поля обязательны для заполнения" });
-  }
+	if (!email || !password) {
+		return res.status(400).json({ message: "Поля обязательны для заполнения" })
+	}
 
-  let user = await User.findOne({ email });
+	const user = await User.findOne({ email })
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    const role = (user.role || "user").trim();
-    let token = jwt.sign(
-      { email, id: user._id, role },
-      process.env.SECRET_KEY,
-      { expiresIn: "1w" },
-    );
+	if (user && (await bcrypt.compare(password, user.password))) {
+		const role = (user.role || "user").trim()
+		const token = jwt.sign(
+			{ email, id: user._id, role },
+			process.env.SECRET_KEY,
+			{ expiresIn: "1w" },
+		)
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		})
 
-    const redirectPath = role === "admin" ? "/admin" : "/";
-    console.log({ role, redirectPath });
-    return res.status(200).json({
-      message: "Пользователь авторизован",
-      user,
-      token,
-      role,
-      redirect: redirectPath,
-    });
-  } else {
-    return res.status(400).json({ message: "Неправильный пароль или логин" });
-  }
-});
+		return res.status(200).json({
+			message: "Пользователь авторизован",
+			user: {
+				id: user._id,
+				email: user.email,
+				name: user.name,
+				role,
+			},
+			token,
+			redirect: role === "admin" ? "/admin" : "/",
+		})
+	}
+
+	return res.status(400).json({ message: "Неправильный пароль или логин" })
+})
 
 router.get("/verify", cookieAuth, async (req, res) => {
   try {
