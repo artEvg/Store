@@ -33,12 +33,12 @@ router.post("/register", async (req, res) => {
     { expiresIn: "1w" },
   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+res.cookie("token", token, {
+	httpOnly: true,
+	secure: true, // всегда true в production
+	sameSite: "none", // не "lax" для cross-domain
+	maxAge: 7 * 24 * 60 * 60 * 1000,
+})
 
   res.status(201).json({
     message: "Пользователь создан",
@@ -65,12 +65,12 @@ router.post("/signin", async (req, res) => {
 			{ expiresIn: "1w" },
 		)
 
-		res.cookie("token", token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
-			sameSite: "lax",
-			maxAge: 7 * 24 * 60 * 60 * 1000,
-		})
+res.cookie("token", token, {
+	httpOnly: true,
+	secure: true, // всегда true в production
+	sameSite: "none", // не "lax" для cross-domain
+	maxAge: 7 * 24 * 60 * 60 * 1000,
+})
 
 		return res.status(200).json({
 			message: "Пользователь авторизован",
@@ -110,11 +110,11 @@ router.get("/verify", cookieAuth, async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
+res.clearCookie("token", {
+	httpOnly: true,
+	secure: true,
+	sameSite: "none",
+})
 
   res.status(200).json({ message: "Пользователь вышел" });
 });

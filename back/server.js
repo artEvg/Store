@@ -12,7 +12,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }))
 
 app.use(
 	cors({
-		origin: "https://store-jjy2.onrender.com",
+		origin: process.env.FRONTEND_URL || "https://store-jjy2.onrender.com",
 		credentials: true,
 		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 		allowedHeaders: ["Content-Type", "Authorization"],

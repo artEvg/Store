@@ -17,10 +17,26 @@ import ProfileOrders from "./pages/ProfileOrders"
 import UpdateItem from "./components/admin/UpdateItem"
 import DiscountPercent from "./components/DiscountPercent"
 import Footer from "./components/Footer"
+import { useAuth } from "./auth/AuthContext"
+import { Navigate } from "react-router-dom"
 
 function App() {
 	const location = useLocation()
+	const { isAdmin, loading } = useAuth()
 	const hideHeader = /^\/admin(\/|$)/.test(location.pathname)
+
+	if (loading) {
+		return <div>Загрузка...</div>
+	}
+
+	if (/^\/admin(\/|$)/.test(location.pathname) && !isAdmin) {
+		return (
+			<Navigate
+				to='/'
+				replace
+			/>
+		)
+	}
 
 	return (
 		<>

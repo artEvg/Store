@@ -28,13 +28,18 @@ export const AuthProvider = ({ children }) => {
 				},
 			)
 
+			console.log("VERIFY STATUS:", response.status)
+			console.log("VERIFY OK:", response.ok)
+
 			if (response.ok) {
 				const data = await response.json()
+				console.log("VERIFY DATA:", data)
 				setUser({
 					...data.user,
 					role: normalizeRole(data?.user?.role),
 				})
 			} else {
+				console.log("VERIFY FAILED, SET USER NULL")
 				setUser(null)
 			}
 		} catch (error) {
