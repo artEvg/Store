@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../auth/AuthContext"
 
 function Signup() {
 	const [form, setForm] = useState({ email: "", password: "", name: "" })
 	const [loading, setLoading] = useState(false)
 	const [err, setErr] = useState("")
 	const navigate = useNavigate()
+	const { register } = useAuth()
 
 	const onSubmit = async e => {
 		e.preventDefault()
@@ -13,23 +15,11 @@ function Signup() {
 		setLoading(true)
 
 		try {
-			const res = await fetch(
-				"https://buba-backend.onrender.com/users/register",
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					credentials: "include",
-					body: JSON.stringify(form),
-				},
-			)
+			const result = await register(form)
 
-			const data = await res.json()
-
-			if (!res.ok) {
-				throw new Error(data?.message || "Ошибка регистрации")
+			if (!result.success) {
+				throw new Error(result.error || "Ошибка регистрации")
 			}
-
-			sessionStorage.setItem("needHeaderReload", "true")
 
 			navigate("/", { replace: true })
 		} catch (error) {
