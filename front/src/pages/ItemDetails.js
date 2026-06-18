@@ -176,9 +176,9 @@ function ItemDetails() {
 
 					<button
 						onClick={handleAddToCart}
-						disabled={item.stock === 0}
-						className=' mt-7 whitespace-nowrap w-44 disabled:bg-gray-400'>
-						{item.stock === 0 ? "Нет в наличии" : "Добавить в корзину"}
+						disabled={!item || item.stock === 0}
+						className='mt-7 whitespace-nowrap w-44 disabled:bg-gray-400'>
+						{item?.stock === 0 ? "Нет в наличии" : "Добавить в корзину"}
 					</button>
 
 					{message && (
