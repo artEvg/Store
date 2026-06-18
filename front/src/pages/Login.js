@@ -13,14 +13,17 @@ function Login() {
 		setLoading(true)
 
 		try {
-			const res = await fetch("http://localhost:5000/users/signin", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const res = await fetch(
+				"https://buba-backend.onrender.com/users/signin",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(form),
 				},
-				credentials: "include",
-				body: JSON.stringify(form),
-			})
+			)
 
 			const data = await res.json()
 

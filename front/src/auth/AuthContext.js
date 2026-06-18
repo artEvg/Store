@@ -24,10 +24,13 @@ export const AuthProvider = ({ children }) => {
 
 	const checkAuthStatus = async () => {
 		try {
-			const response = await fetch("http://localhost:5000/users/verify", {
-				method: "GET",
-				credentials: "include",
-			})
+			const response = await fetch(
+				"https://buba-backend.onrender.com/users/verify",
+				{
+					method: "GET",
+					credentials: "include",
+				},
+			)
 
 			if (response.ok) {
 				const data = await response.json()
@@ -49,14 +52,17 @@ export const AuthProvider = ({ children }) => {
 
 	const login = async credentials => {
 		try {
-			const response = await fetch("http://localhost:5000/users/signin", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				"https://buba-backend.onrender.com/users/signin",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(credentials),
 				},
-				credentials: "include",
-				body: JSON.stringify(credentials),
-			})
+			)
 
 			const data = await response.json()
 
@@ -87,14 +93,17 @@ export const AuthProvider = ({ children }) => {
 
 	const register = async userData => {
 		try {
-			const response = await fetch("http://localhost:5000/users/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				"https://buba-backend.onrender.com/users/register",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(userData),
 				},
-				credentials: "include",
-				body: JSON.stringify(userData),
-			})
+			)
 
 			const data = await response.json()
 
@@ -125,7 +134,7 @@ export const AuthProvider = ({ children }) => {
 
 	const logout = async () => {
 		try {
-			await fetch("http://localhost:5000/users/logout", {
+			await fetch("https://buba-backend.onrender.com/users/logout", {
 				method: "POST",
 				credentials: "include",
 			})

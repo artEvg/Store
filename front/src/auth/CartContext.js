@@ -6,7 +6,7 @@ export function CartProvider({ children }) {
 	const [cart, setCart] = useState(null)
 
 	useEffect(() => {
-		fetch("http://localhost:5000/carts", { credentials: "include" })
+		fetch("https://buba-backend.onrender.com/carts", { credentials: "include" })
 			.then(res => res.json())
 			.then(data => setCart(data.cart))
 	}, [])
@@ -14,7 +14,7 @@ export function CartProvider({ children }) {
 	const addToCart = async (itemId, size = "") => {
 		console.log("sending itemId:", itemId, "size:", size)
 
-		const res = await fetch("http://localhost:5000/carts/add", {
+		const res = await fetch("https://buba-backend.onrender.com/carts/add", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -32,7 +32,7 @@ export function CartProvider({ children }) {
 	}
 
 	const updateCart = async (itemId, quantity) => {
-		const res = await fetch("http://localhost:5000/carts/update", {
+		const res = await fetch("https://buba-backend.onrender.com/carts/update", {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -51,17 +51,20 @@ export function CartProvider({ children }) {
 	}
 
 	const removeFromCart = async itemId => {
-		const res = await fetch(`http://localhost:5000/carts/remove/${itemId}`, {
-			method: "DELETE",
-			credentials: "include",
-		})
+		const res = await fetch(
+			`https://buba-backend.onrender.com/carts/remove/${itemId}`,
+			{
+				method: "DELETE",
+				credentials: "include",
+			},
+		)
 
 		const data = await res.json()
 		setCart(data.cart)
 	}
 
 	const clearCart = async () => {
-		const res = await fetch("http://localhost:5000/carts/clear", {
+		const res = await fetch("https://buba-backend.onrender.com/carts/clear", {
 			method: "POST",
 			credentials: "include",
 		})

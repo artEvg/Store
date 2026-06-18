@@ -13,12 +13,15 @@ function Signup() {
 		setLoading(true)
 
 		try {
-			const res = await fetch("http://localhost:5000/users/register", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify(form),
-			})
+			const res = await fetch(
+				"https://buba-backend.onrender.com/users/register",
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					credentials: "include",
+					body: JSON.stringify(form),
+				},
+			)
 
 			const data = await res.json()
 

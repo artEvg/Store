@@ -14,7 +14,7 @@ function ItemDetails() {
 	const { addToCart } = useCart()
 
 	useEffect(() => {
-		fetch(`http://localhost:5000/items/${id}`)
+		fetch(`https://buba-backend.onrender.com/items/${id}`)
 			.then(res => res.json())
 			.then(data => {
 				setItem(data)
@@ -63,7 +63,7 @@ function ItemDetails() {
 				<div className='flex justify-center'>
 					<div className='relative w-[500px] h-[500px]'>
 						<img
-							src={`http://localhost:5000/images/${allImages[currentImageIndex]}`}
+							src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
 							alt={item?.title}
 							className='w-[500px] h-[500px] object-cover rounded-lg shadow'
 						/>

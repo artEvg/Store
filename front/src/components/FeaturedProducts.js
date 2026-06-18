@@ -9,7 +9,7 @@ function FeaturedProducts() {
 	const { addToCart } = useCart()
 
 	useEffect(() => {
-		fetch("http://localhost:5000/items/getItems")
+		fetch("https://buba-backend.onrender.com/items/getItems")
 			.then(res => res.json())
 			.then(data => setItemList(data))
 			.catch(err => console.error("Error fetching items:", err))
@@ -59,7 +59,7 @@ function FeaturedProducts() {
 							<Link to={`/itemDetails/${item?._id}`}>
 								<img
 									className='w-full h-[220px] object-cover rounded-lg'
-									src={`http://localhost:5000/images/${item.coverImage}`}
+									src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
 									alt={item.title}
 								/>
 								<h6 className='text-center my-3 min-h-[20px] line-clamp-2'>

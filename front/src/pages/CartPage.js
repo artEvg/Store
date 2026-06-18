@@ -34,14 +34,17 @@ function CartPage() {
 		setShowError("")
 
 		try {
-			const res = await fetch("http://localhost:5000/orders/create", {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
+			const res = await fetch(
+				"https://buba-backend.onrender.com/orders/create",
+				{
+					method: "POST",
+					credentials: "include",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ address }),
 				},
-				body: JSON.stringify({ address }),
-			})
+			)
 
 			const data = await res.json()
 
@@ -110,7 +113,7 @@ function CartPage() {
 						key={item._id}
 						className='flex items-center gap-4 border rounded-lg p-4 shadow-sm bg-white'>
 						<img
-							src={`http://localhost:5000/images/${item?.item?.coverImage}`}
+							src={`https://buba-backend.onrender.com/images/${item?.item?.coverImage}`}
 							className='rounded w-24 h-32 object-cover'
 							alt={item?.item?.title}
 						/>

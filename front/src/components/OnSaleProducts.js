@@ -8,7 +8,7 @@ function OnSaleProducts() {
 	const { addToCart } = useCart()
 
 	useEffect(() => {
-		fetch("http://localhost:5000/items/getItems")
+		fetch("https://buba-backend.onrender.com/items/getItems")
 			.then(res => res.json())
 			.then(data => setItemList(data))
 			.catch(err => console.error("Error fetching items:", err))

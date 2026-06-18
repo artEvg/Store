@@ -9,7 +9,7 @@ function UpdateItem() {
 	const [submitting, setSubmitting] = useState(false)
 
 	useEffect(() => {
-		fetch(`http://localhost:5000/items/${id}`)
+		fetch(`https://buba-backend.onrender.com/items/${id}`)
 			.then(res => res.json())
 			.then(data => {
 				setItem({
@@ -77,11 +77,14 @@ function UpdateItem() {
 				}
 			}
 
-			const res = await fetch(`http://localhost:5000/items/updateItem/${id}`, {
-				method: "PUT",
-				credentials: "include",
-				body: formData,
-			})
+			const res = await fetch(
+				`https://buba-backend.onrender.com/items/updateItem/${id}`,
+				{
+					method: "PUT",
+					credentials: "include",
+					body: formData,
+				},
+			)
 
 			const data = await res.json()
 			alert(data.message || data.error)
@@ -98,10 +101,13 @@ function UpdateItem() {
 		if (!window.confirm("Вы действительно хотите удалить товар?")) return
 
 		try {
-			const res = await fetch(`http://localhost:5000/items/deleteItem/${id}`, {
-				method: "DELETE",
-				credentials: "include",
-			})
+			const res = await fetch(
+				`https://buba-backend.onrender.com/items/deleteItem/${id}`,
+				{
+					method: "DELETE",
+					credentials: "include",
+				},
+			)
 
 			const data = await res.json()
 			alert(data.message)
@@ -223,7 +229,7 @@ function UpdateItem() {
 				</label>
 				{item.coverImage && typeof item.coverImage === "string" && (
 					<img
-						src={`http://localhost:5000/images/${item.coverImage}`}
+						src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
 						alt='Current cover'
 						className='w-32 h-40 object-cover rounded mb-2'
 					/>
@@ -247,7 +253,7 @@ function UpdateItem() {
 							.map((img, idx) => (
 								<img
 									key={idx}
-									src={`http://localhost:5000/images/${img}`}
+									src={`https://buba-backend.onrender.com/images/${img}`}
 									alt={`Additional ${idx}`}
 									className='w-20 h-24 object-cover rounded'
 								/>

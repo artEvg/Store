@@ -15,7 +15,7 @@ function AdminOrders() {
 			return
 		}
 
-		fetch("http://localhost:5000/orders/all-orders", {
+		fetch("https://buba-backend.onrender.com/orders/all-orders", {
 			credentials: "include",
 		})
 			.then(res => res.json())
@@ -32,7 +32,7 @@ function AdminOrders() {
 	}, [authLoading, isAuthenticated, isAdmin, navigate])
 
 	const handleStatusChange = (orderId, newStatus) => {
-		fetch(`http://localhost:5000/orders/updateStatus/${orderId}`, {
+		fetch(`https://buba-backend.onrender.com/orders/updateStatus/${orderId}`, {
 			method: "PUT",
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
@@ -132,7 +132,7 @@ function AdminOrders() {
 											key={idx}
 											className='flex items-center gap-4'>
 											<img
-												src={`http://localhost:5000/images/${item?.item?.coverImage}`}
+												src={`https://buba-backend.onrender.com/images/${item?.item?.coverImage}`}
 												className='w-16 h-20 object-cover rounded'
 												alt={item?.item?.title}
 											/>

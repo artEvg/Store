@@ -37,7 +37,7 @@ function AddItem() {
 		const loadCats = async () => {
 			try {
 				const res = await fetch(
-					"http://localhost:5000/category/getCategories",
+					"https://buba-backend.onrender.com/category/getCategories",
 					{
 						method: "GET",
 						credentials: "include",
@@ -138,11 +138,14 @@ function AddItem() {
 
 		try {
 			setSubmitting(true)
-			const res = await fetch("http://localhost:5000/admin/createItem", {
-				method: "POST",
-				credentials: "include",
-				body: fd,
-			})
+			const res = await fetch(
+				"https://buba-backend.onrender.com/admin/createItem",
+				{
+					method: "POST",
+					credentials: "include",
+					body: fd,
+				},
+			)
 			const data = await res.json().catch(() => ({}))
 
 			if (res.status === 401 || res.status === 403) {

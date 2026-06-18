@@ -12,11 +12,14 @@ function Allitems() {
 	useEffect(() => {
 		const fetchItems = async () => {
 			try {
-				const res = await fetch("http://localhost:5000/admin/getItems", {
-					method: "GET",
-					credentials: "include",
-					headers: { "Content-Type": "application/json" },
-				})
+				const res = await fetch(
+					"https://buba-backend.onrender.com/admin/getItems",
+					{
+						method: "GET",
+						credentials: "include",
+						headers: { "Content-Type": "application/json" },
+					},
+				)
 
 				if (res.status === 401 || res.status === 403) {
 					setError("Not authorized")
@@ -50,7 +53,7 @@ function Allitems() {
 
 		try {
 			const res = await fetch(
-				`http://localhost:5000/items/deleteItem/${itemId}`,
+				`https://buba-backend.onrender.com/items/deleteItem/${itemId}`,
 				{
 					method: "DELETE",
 					credentials: "include", // ← обязательно для куки
@@ -82,7 +85,7 @@ function Allitems() {
 
 		try {
 			const res = await fetch(
-				`http://localhost:5000/items/updateItem/${itemId}`,
+				`https://buba-backend.onrender.com/items/updateItem/${itemId}`,
 				{
 					method: "PUT",
 					credentials: "include",
@@ -126,7 +129,7 @@ function Allitems() {
 						className='flex flex-col border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full'>
 						<a href={`/admin/update-item/${item?._id}`}>
 							<img
-								src={`http://localhost:5000/images/${item.coverImage}`}
+								src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
 								alt={item.title}
 								className='w-full h-[300px] object-cover rounded-lg'
 							/>
