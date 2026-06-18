@@ -16,7 +16,6 @@ function Header() {
 		{ name: "Главная", path: "/" },
 		{ name: "Контакты", path: "/contacts" },
 		{ name: "О нас", path: "/about" },
-		{ name: "Заказы", path: "/orders" },
 	]
 
 	React.useEffect(() => {
@@ -103,6 +102,14 @@ function Header() {
 						{link.name}
 					</Link>
 				))}
+
+				{isAuthenticated && (
+					<Link
+						to='/orders'
+						className='text-gray-700 hover:text-[#F86D72] transition'>
+						Заказы
+					</Link>
+				)}
 			</div>
 
 			{renderUserActions()}
@@ -134,6 +141,15 @@ function Header() {
 						{link.name}
 					</Link>
 				))}
+
+				{isAuthenticated && (
+					<Link
+						to='/orders'
+						onClick={() => setIsMenuOpen(false)}
+						className='text-lg'>
+						Заказы
+					</Link>
+				)}
 
 				{!isAuthenticated ? (
 					<>
