@@ -3,10 +3,9 @@ import { ShieldCheck, BadgeCheck, ShoppingCart, Tag } from "lucide-react"
 
 function About() {
 	return (
-		<div className='p-6 lg:p-10 lg:px-52'>
+		<div className='pt-24 p-6 lg:pt-28 lg:p-10 lg:px-52'>
 			<h1 className='text-3xl font-bold mb-6'>О нас</h1>
 
-			{/* Основной текст */}
 			<div className='mb-8'>
 				<p className='text-lg mb-4'>
 					Мы — современная компания, специализирующаяся на продаже качественных
@@ -26,7 +25,6 @@ function About() {
 				</p>
 			</div>
 
-			{/* Наша история */}
 			<div className='mb-8'>
 				<h2 className='text-2xl font-semibold mb-4'>Наша история</h2>
 				<p className='text-lg mb-4'>
@@ -45,7 +43,6 @@ function About() {
 				</p>
 			</div>
 
-			{/* Важная информация */}
 			<div className='bg-gray-100 p-6 rounded-lg'>
 				<h2 className='text-xl font-semibold mb-3'>Важная информация</h2>
 				<p className='text-gray-600'>

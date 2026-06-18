@@ -4,16 +4,14 @@ import { Phone, Mail, MapPin, Send } from "lucide-react"
 function Contacts() {
 	const handleSubmit = e => {
 		e.preventDefault()
-		// Здесь можно добавить отправку формы на backend
 		alert("Ваша сообщение отправлено! Спасибо.")
 	}
 
 	return (
-		<div className='p-6 lg:p-10 lg:px-52'>
+		<div className='pt-24 p-6 lg:pt-28 lg:p-10 lg:px-52'>
 			<h1 className='text-3xl font-bold mb-6'>Контакты</h1>
 
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-				{/* Контактная информация */}
 				<div>
 					<h2 className='text-2xl font-semibold mb-4'>Свяжитесь с нами</h2>
 					<p className='text-gray-600 mb-6'>
