@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function Login() {
 	const [form, setForm] = useState({ email: "", password: "" })
@@ -44,9 +44,6 @@ function Login() {
 			setLoading(false)
 		}
 	}
-  
-
-  
 
 	return (
 		<div className='max-w-md mx-auto py-10 mt-40'>
@@ -81,4 +78,4 @@ function Login() {
 	)
 }
 
-export default Login;
+export default Login
