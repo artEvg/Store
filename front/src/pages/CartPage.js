@@ -57,7 +57,7 @@ function CartPage() {
 
 			setTimeout(() => {
 				setShowSuccess(false)
-				navigate("/profile/orders")
+				navigate("/orders")
 			}, 2000)
 		} catch (err) {
 			setShowError(err.message)

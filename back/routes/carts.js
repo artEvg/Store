@@ -214,7 +214,7 @@ router.delete("/remove/:itemId", cookieAuth, async (req, res) => {
 		}
 
 		const itemIndex = cart.items.findIndex(
-			ci => ci.item && ci.item.toString() === itemId,
+			ci => ci.item && ci.item._id && ci.item._id.toString() === itemId,
 		)
 
 		if (itemIndex === -1) {
