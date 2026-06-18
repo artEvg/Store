@@ -5,14 +5,12 @@ import { ShoppingBasket, Menu, X } from "lucide-react"
 import { useCart } from "../auth/CartContext"
 
 function Header() {
-	const { user, logout, isAuthenticated, isAdmin, refreshAuth } = useAuth()
+	const { logout, isAuthenticated, isAdmin } = useAuth()
 	const { cart } = useCart()
-
 	const navigate = useNavigate()
 
 	const [isScrolled, setIsScrolled] = React.useState(false)
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-	const [authKey, setAuthKey] = React.useState(0)
 
 	const navLinks = [
 		{ name: "Главная", path: "/" },
@@ -28,54 +26,13 @@ function Header() {
 		}
 
 		window.addEventListener("scroll", handleScroll)
-
-		return () => {
-			window.removeEventListener("scroll", handleScroll)
-		}
+		return () => window.removeEventListener("scroll", handleScroll)
 	}, [])
-
-	React.useEffect(() => {
-		// Слушаем изменения в auth через sessionStorage событие
-		const handleStorageChange = e => {
-			if (e.key === "auth_token" || e.key === "user") {
-				setAuthKey(k => k + 1)
-			}
-		}
-
-		window.addEventListener("storage", handleStorageChange)
-
-		// Также проверяем на каждую перерисовку
-		const checkAuth = () => {
-			const token = sessionStorage.getItem("auth_token")
-			const storedUser = sessionStorage.getItem("user")
-
-			if (token && storedUser && !isAuthenticated) {
-				setAuthKey(k => k + 1)
-				if (refreshAuth) refreshAuth()
-			}
-		}
-
-		checkAuth()
-
-		return () => {
-			window.removeEventListener("storage", handleStorageChange)
-		}
-	}, [isAuthenticated, refreshAuth])
 
 	const handleLogout = async () => {
 		await logout()
-		setAuthKey(k => k + 1)
 		navigate("/")
 	}
-
-	React.useEffect(() => {
-		const needReload = sessionStorage.getItem("needHeaderReload")
-
-		if (needReload === "true") {
-			sessionStorage.removeItem("needHeaderReload")
-			window.location.reload()
-		}
-	}, [])
 
 	const renderUserActions = () => {
 		if (!isAuthenticated) {
@@ -84,9 +41,8 @@ function Header() {
 					<button
 						onClick={() => navigate("/login")}
 						className='px-4 py-2 whitespace-nowrap'>
-						Вход{" "}
+						Вход
 					</button>
-
 					<button
 						onClick={() => navigate("/signup")}
 						className='px-4 py-2 whitespace-nowrap'>
@@ -113,7 +69,6 @@ function Header() {
 								{cart.totalItems}
 							</div>
 						)}
-
 						<ShoppingBasket size={24} />
 					</Link>
 				)}
@@ -129,15 +84,9 @@ function Header() {
 
 	return (
 		<nav
-			key={authKey}
-			className={`            
-        fixed top-0 left-0 w-full z-50
-        flex items-center justify-between
-        px-4 md:px-10 lg:px-16
-        transition-all duration-300
-        ${isScrolled ? "bg-white shadow-md py-2" : "bg-white py-3"}
-        border-b border-gray-200
-      `}>
+			className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 md:px-10 lg:px-16 transition-all duration-300 ${
+				isScrolled ? "bg-white shadow-md py-2" : "bg-white py-3"
+			} border-b border-gray-200`}>
 			<Link
 				to='/'
 				className='flex items-center shrink-0'>
@@ -145,7 +94,7 @@ function Header() {
 					BUBA
 				</h3>
 			</Link>
-			{/* Desktop Navigation */}
+
 			<div className='hidden md:flex items-center gap-8'>
 				{navLinks.map(link => (
 					<Link
@@ -156,27 +105,21 @@ function Header() {
 					</Link>
 				))}
 			</div>
-			{/* Right */}
+
 			{renderUserActions()}
-			{/* Mobile Menu Button */}
+
 			<button
 				className='md:hidden !bg-transparent !text-black !p-0'
 				onClick={() => setIsMenuOpen(true)}>
 				<Menu size={28} />
 			</button>
-			{/* Mobile Menu */}
+
 			<div
 				className={`
-        fixed top-0 left-0
-        w-full h-screen
-        bg-white
-        flex flex-col
-        items-center
-        justify-center
-        gap-6
-        transition-all duration-300
-        ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
-      `}>
+          fixed top-0 left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-6
+          transition-all duration-300
+          ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
+        `}>
 				<button
 					className='absolute top-5 right-5 !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(false)}>

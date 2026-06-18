@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState, useMemo } from "react"
 
 export const AuthContext = createContext(null)
 
@@ -18,10 +18,6 @@ export const AuthProvider = ({ children }) => {
 
 	const normalizeRole = role => (role || "user").toString().trim().toLowerCase()
 
-	useEffect(() => {
-		checkAuthStatus()
-	}, [])
-
 	const checkAuthStatus = async () => {
 		try {
 			const response = await fetch(
@@ -34,7 +30,6 @@ export const AuthProvider = ({ children }) => {
 
 			if (response.ok) {
 				const data = await response.json()
-
 				setUser({
 					...data.user,
 					role: normalizeRole(data?.user?.role),
@@ -49,6 +44,10 @@ export const AuthProvider = ({ children }) => {
 			setLoading(false)
 		}
 	}
+
+	useEffect(() => {
+		checkAuthStatus()
+	}, [])
 
 	const login = async credentials => {
 		try {
@@ -67,16 +66,13 @@ export const AuthProvider = ({ children }) => {
 			const data = await response.json()
 
 			if (response.ok) {
-				setUser({
+				const nextUser = {
 					...data.user,
 					role: normalizeRole(data?.user?.role),
-				})
-
-				window.location.reload()
-
-				return {
-					success: true,
 				}
+
+				setUser(nextUser)
+				return { success: true, user: nextUser }
 			}
 
 			return {
@@ -108,16 +104,13 @@ export const AuthProvider = ({ children }) => {
 			const data = await response.json()
 
 			if (response.ok) {
-				setUser({
+				const nextUser = {
 					...data.user,
 					role: normalizeRole(data?.user?.role),
-				})
-
-				window.location.reload()
-
-				return {
-					success: true,
 				}
+
+				setUser(nextUser)
+				return { success: true, user: nextUser }
 			}
 
 			return {
@@ -145,17 +138,20 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 
-	const value = {
-		user,
-		setUser,
-		login,
-		register,
-		logout,
-		loading,
-		refreshAuth: checkAuthStatus,
-		isAuthenticated: !!user,
-		isAdmin: user?.role === "admin",
-	}
+	const value = useMemo(
+		() => ({
+			user,
+			setUser,
+			login,
+			register,
+			logout,
+			loading,
+			refreshAuth: checkAuthStatus,
+			isAuthenticated: !!user,
+			isAdmin: user?.role === "admin",
+		}),
+		[user, loading],
+	)
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
