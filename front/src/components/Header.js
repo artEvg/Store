@@ -14,7 +14,6 @@ function Header() {
 
 	const navLinks = [
 		{ name: "Главная", path: "/" },
-		{ name: "Товары", path: "/catalog" },
 		{ name: "Контакты", path: "/contacts" },
 		{ name: "О нас", path: "/about" },
 		{ name: "Заказы", path: "/orders" },
