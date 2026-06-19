@@ -74,22 +74,6 @@ function FeaturedProducts() {
 							</strong>
 
 							<div className='text-sm text-gray-500'>Остаток: {item.stock}</div>
-
-							<button
-								onClick={() => {
-									addToCart(item._id)
-									setItemList(prev =>
-										prev.map(b =>
-											b._id === item._id ? { ...b, stock: b.stock - 1 } : b,
-										),
-									)
-									setMessage("Товар добавлен в корзину")
-									setTimeout(() => setMessage(""), 3000) // сброс сообщения через 3 сек
-								}}
-								disabled={item.stock === 0}
-								className='mt-5 whitespace-nowrap w-full disabled:bg-gray-400'>
-								{item.stock === 0 ? "Нет в наличии" : "Добавить в корзину"}
-							</button>
 						</div>
 					))
 				)}

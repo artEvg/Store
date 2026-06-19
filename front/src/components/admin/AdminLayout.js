@@ -6,7 +6,6 @@ import {
 	BookOpen,
 	PlusCircle,
 	Home,
-	MenuIcon,
 	ClipboardList,
 } from "lucide-react"
 
@@ -41,7 +40,6 @@ function AdminLayout() {
 						<span>Добавить товар</span>
 					</NavLink>
 
-					{/* ← ДОБАВЛЕНО: Кнопка «Заказы» */}
 					<NavLink
 						to='/admin/orders'
 						className='flex items-center gap-2 text-slate-300 hover:text-white transition-colors'>
@@ -57,14 +55,7 @@ function AdminLayout() {
 					</NavLink>
 				</nav>
 
-				<div className='md:hidden'>
-					<button
-						className='inline-flex items-center justify-center !bg-transparent !border-none !text-white rounded-md p-2'
-						aria-label='Open navigation'
-						onClick={() => setOpen(true)}>
-						<MenuIcon className='h-5 w-5' />
-					</button>
-				</div>
+				{/* ← УДАЛЕНО: вторая кнопка меню (дубликат) */}
 			</header>
 
 			<div
@@ -100,7 +91,6 @@ function AdminLayout() {
 							<span>Добавить товар</span>
 						</NavLink>
 
-						{/* ← ДОБАВЛЕНО: Кнопка «Заказы» в мобильном меню */}
 						<NavLink
 							to='/admin/orders'
 							onClick={() => setOpen(false)}
