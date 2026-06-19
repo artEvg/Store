@@ -103,7 +103,8 @@ function Header() {
 					</Link>
 				))}
 
-				{isAuthenticated && (
+				{/* ← УДАЛЕНО: кнопка "Заказы" для админа */}
+				{isAuthenticated && !isAdmin && (
 					<Link
 						to='/orders'
 						className='text-gray-700 hover:text-[#F86D72] transition'>
@@ -142,7 +143,8 @@ function Header() {
 					</Link>
 				))}
 
-				{isAuthenticated && (
+				{/* ← УДАЛЕНО: кнопка "Заказы" для админа в мобильном меню */}
+				{isAuthenticated && !isAdmin && (
 					<Link
 						to='/orders'
 						onClick={() => setIsMenuOpen(false)}
