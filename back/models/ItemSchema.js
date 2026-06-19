@@ -44,6 +44,20 @@ const ItemSchema = new mongoose.Schema({
 	discountPercent: {
 		type: Number,
 		default: 0,
+		set: function (value) {
+			if (
+				value === "false" ||
+				value === false ||
+				value === null ||
+				value === undefined
+			) {
+				return 0
+			}
+			if (value === "true" || value === true) {
+				return 100
+			}
+			return Number(value) || 0
+		},
 	},
 
 	category: {

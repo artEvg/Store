@@ -76,7 +76,7 @@ function ItemDetails() {
 											prev === 0 ? allImages.length - 1 : prev - 1,
 										)
 									}
-									className='absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-500 hover:bg-gray-600 rounded-full transition-colors'>
+									className='absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
 									<svg
 										className='w-4 h-4 text-gray-700'
 										fill='none'
@@ -97,7 +97,7 @@ function ItemDetails() {
 											prev === allImages.length - 1 ? 0 : prev + 1,
 										)
 									}
-									className='absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-500 hover:bg-gray-600 rounded-full transition-colors'>
+									className='absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
 									<svg
 										className='w-4 h-4 text-gray-700'
 										fill='none'
