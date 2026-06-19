@@ -171,14 +171,27 @@ function Header() {
 					</>
 				) : (
 					<>
-						{!isAdmin && (
+						{isAdmin ? (
 							<button
 								onClick={() => {
-									navigate("/cart")
+									navigate("/admin")
 									setIsMenuOpen(false)
 								}}>
-								Корзина
+								Панель Админа
 							</button>
+						) : (
+							<Link
+								to='/cart'
+								onClick={() => setIsMenuOpen(false)}
+								className='relative flex items-center gap-2'>
+								{cart?.totalItems > 0 && (
+									<div className='absolute -top-8 -right-8 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center'>
+										{cart.totalItems}
+									</div>
+								)}
+								<ShoppingBasket size={28} />
+								<span>Корзина</span>
+							</Link>
 						)}
 
 						<button
