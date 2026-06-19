@@ -146,18 +146,6 @@ function Allitems() {
 						{/* ← Кнопки управления */}
 						<div className='flex gap-2 mt-3'>
 							<button
-								className={`px-4 py-2 rounded text-sm flex-1 ${
-									item.isFeatured
-										? "bg-yellow-500 text-white hover:bg-yellow-600"
-										: "bg-green-500 text-white hover:bg-green-600"
-								}`}
-								onClick={() =>
-									handleToggleVisibility(item._id, item.isFeatured)
-								}>
-								{item.isFeatured ? "Скрыть" : "Отобразить"}
-							</button>
-
-							<button
 								className='px-4 py-2 bg-red-600 text-white rounded text-sm'
 								onClick={() => handleDelete(item._id)}>
 								Удалить
