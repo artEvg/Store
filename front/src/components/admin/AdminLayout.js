@@ -15,15 +15,7 @@ function AdminLayout() {
 	return (
 		<div className='min-h-screen bg-slate-50 text-slate-900'>
 			<header className='sticky top-0 z-30 shadow-lg h-14 bg-slate-900 flex items-center justify-between px-4'>
-				<div className='flex items-center gap-2'>
-					<button
-						className='md:hidden inline-flex items-center justify-center !bg-transparent !border-none !text-white rounded-md p-2'
-						aria-label='Open menu'
-						onClick={() => setOpen(true)}>
-						<Menu className='h-5 w-5' />
-					</button>
-					<h4 className='font-bold text-white'>Панель Администратора</h4>
-				</div>
+				<h4 className='font-bold text-white'>Панель Администратора</h4>
 
 				<nav className='hidden md:flex items-center gap-4'>
 					<NavLink
@@ -55,7 +47,12 @@ function AdminLayout() {
 					</NavLink>
 				</nav>
 
-				{/* ← УДАЛЕНО: вторая кнопка меню (дубликат) */}
+				<button
+					className='md:hidden inline-flex items-center justify-center !bg-transparent !border-none !text-white rounded-md p-2'
+					aria-label='Open menu'
+					onClick={() => setOpen(true)}>
+					<Menu className='h-5 w-5' />
+				</button>
 			</header>
 
 			<div
