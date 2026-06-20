@@ -116,7 +116,7 @@ function Header() {
 			{renderUserActions()}
 
 			<button
-				className='md:hidden ml-auto mr-1 !bg-transparent !text-black !p-0'
+				className='md:hidden mr-2 !bg-transparent !text-black !p-0'
 				onClick={() => setIsMenuOpen(true)}>
 				<Menu size={28} />
 			</button>
@@ -128,7 +128,7 @@ function Header() {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}>
 				<button
-					className='absolute top-5 right-5 !bg-transparent !text-black !p-0'
+					className='absolute top-5 right-2 !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(false)}>
 					<X size={28} />
 				</button>
