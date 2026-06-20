@@ -55,67 +55,6 @@ function Contacts() {
 						</p>
 					</div>
 				</div>
-
-				<div>
-					<h2 className='text-2xl font-semibold mb-4'>Напишите нам</h2>
-					<form
-						onSubmit={handleSubmit}
-						className='space-y-4'>
-						<div>
-							<label className='block text-sm font-medium mb-1'>Ваше имя</label>
-							<input
-								type='text'
-								name='name'
-								required
-								className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F86D72] focus:border-transparent'
-								placeholder='Введите ваше имя'
-							/>
-						</div>
-
-						<div>
-							<label className='block text-sm font-medium mb-1'>Email</label>
-							<input
-								type='email'
-								name='email'
-								required
-								className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F86D72] focus:border-transparent'
-								placeholder='Введите ваш Email'
-							/>
-						</div>
-
-						<div>
-							<label className='block text-sm font-medium mb-1'>
-								Телефон (опционально)
-							</label>
-							<input
-								type='tel'
-								name='phone'
-								className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F86D72] focus:border-transparent'
-								placeholder='Введите ваш телефон'
-							/>
-						</div>
-
-						<div>
-							<label className='block text-sm font-medium mb-1'>
-								Сообщение
-							</label>
-							<textarea
-								name='message'
-								required
-								rows='5'
-								className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F86D72] focus:border-transparent'
-								placeholder='Введите ваше сообщение'
-							/>
-						</div>
-
-						<button
-							type='submit'
-							className='w-full bg-[#F86D72] text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#e55a60] transition-colors'>
-							<Send className='w-5 h-5' />
-							Отправить сообщение
-						</button>
-					</form>
-				</div>
 			</div>
 		</div>
 	)
