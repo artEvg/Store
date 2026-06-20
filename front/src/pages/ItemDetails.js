@@ -76,9 +76,9 @@ function ItemDetails() {
 											prev === 0 ? allImages.length - 1 : prev - 1,
 										)
 									}
-									className='absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
+									className='absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70'>
 									<svg
-										className='w-4 h-4 text-gray-700'
+										className='w-3.5 h-3.5 text-gray-700'
 										fill='none'
 										stroke='currentColor'
 										viewBox='0 0 24 24'>
@@ -97,9 +97,9 @@ function ItemDetails() {
 											prev === allImages.length - 1 ? 0 : prev + 1,
 										)
 									}
-									className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
+									className='absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70'>
 									<svg
-										className='w-4 h-4 text-gray-700'
+										className='w-3.5 h-3.5 text-gray-700'
 										fill='none'
 										stroke='currentColor'
 										viewBox='0 0 24 24'>
