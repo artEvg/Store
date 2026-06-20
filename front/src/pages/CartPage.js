@@ -89,7 +89,7 @@ function CartPage() {
 	)
 
 	return (
-		<div className='mt-4 min-h-screen px-4 py-6 max-w-6xl mx-auto'>
+		<div className='mt-20 min-h-screen px-4 py-6 max-w-6xl mx-auto'>
 			<h3 className='my-4 text-xl'>Корзина</h3>
 
 			{showSuccess && (
