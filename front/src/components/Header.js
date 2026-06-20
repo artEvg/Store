@@ -103,7 +103,6 @@ function Header() {
 					</Link>
 				))}
 
-				{/* ← УДАЛЕНО: кнопка "Заказы" для админа */}
 				{isAuthenticated && !isAdmin && (
 					<Link
 						to='/orders'
@@ -118,12 +117,9 @@ function Header() {
 				{renderUserActions()}
 
 				<button
-					className='md:hidden items-end !bg-transparent !text-black !p-0'
+					className='md:hidden flex justify-end !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(true)}>
-					<Menu
-						className='items-end'
-						size={28}
-					/>
+					<Menu size={28} />
 				</button>
 			</div>
 
@@ -134,12 +130,9 @@ function Header() {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}>
 				<button
-					className='absolute items-end top-5 right-0 !bg-transparent !text-black !p-0'
+					className='absolute flex justify-end top-5 right-0 !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(false)}>
-					<X
-						className='items-end'
-						size={28}
-					/>
+					<X size={28} />
 				</button>
 
 				{navLinks.map(link => (
@@ -152,7 +145,6 @@ function Header() {
 					</Link>
 				))}
 
-				{/* ← УДАЛЕНО: кнопка "Заказы" для админа в мобильном меню */}
 				{isAuthenticated && !isAdmin && (
 					<Link
 						to='/orders'
