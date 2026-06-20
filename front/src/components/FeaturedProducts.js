@@ -57,11 +57,13 @@ function FeaturedProducts() {
 							key={item._id}
 							className='relative flex flex-col justify-between border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full'>
 							<Link to={`/itemDetails/${item?._id}`}>
-								<img
-									className='w-full h-[220px] object-cover rounded-lg'
-									src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
-									alt={item.title}
-								/>
+								<div className='w-full aspect-square overflow-hidden rounded-lg'>
+									<img
+										className='w-full h-full object-cover'
+										src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
+										alt={item.title}
+									/>
+								</div>
 								<h6 className='text-center my-3 min-h-[20px] line-clamp-2'>
 									{item.title}
 								</h6>
