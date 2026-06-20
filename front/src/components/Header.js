@@ -113,13 +113,16 @@ function Header() {
 				)}
 			</div>
 
-			{renderUserActions()}
+			{/* Правая часть: userActions + бургер, прижатая вправо */}
+			<div className='ml-auto flex items-center gap-2'>
+				{renderUserActions()}
 
-			<button
-				className='md:hidden mr-2 !bg-transparent !text-black !p-0'
-				onClick={() => setIsMenuOpen(true)}>
-				<Menu size={28} />
-			</button>
+				<button
+					className='md:hidden !bg-transparent !text-black !p-0'
+					onClick={() => setIsMenuOpen(true)}>
+					<Menu size={28} />
+				</button>
+			</div>
 
 			<div
 				className={`
@@ -128,7 +131,7 @@ function Header() {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}>
 				<button
-					className='absolute top-5 right-2 !bg-transparent !text-black !p-0'
+					className='absolute top-5 right-0 !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(false)}>
 					<X size={28} />
 				</button>
