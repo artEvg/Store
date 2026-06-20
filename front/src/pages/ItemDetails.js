@@ -60,12 +60,12 @@ function ItemDetails() {
 	return (
 		<div className='mt-20 max-w-6xl mx-auto px-6'>
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-10 items-start bg-white shadow-md rounded-lg p-6'>
-				<div className='flex justify-center'>
-					<div className='relative w-[500px] h-[500px]'>
+				<div className='flex justify-center w-full'>
+					<div className='relative w-full max-w-[500px] aspect-square'>
 						<img
 							src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
 							alt={item?.title}
-							className='w-[500px] h-[500px] object-cover rounded-lg shadow'
+							className='w-full h-full object-cover rounded-lg shadow'
 						/>
 
 						{allImages.length > 1 && (
@@ -76,7 +76,7 @@ function ItemDetails() {
 											prev === 0 ? allImages.length - 1 : prev - 1,
 										)
 									}
-									className='absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
+									className='absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
 									<svg
 										className='w-4 h-4 text-gray-700'
 										fill='none'
@@ -97,7 +97,7 @@ function ItemDetails() {
 											prev === allImages.length - 1 ? 0 : prev + 1,
 										)
 									}
-									className='absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
+									className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-300 hover:bg-gray-400 rounded-full transition-colors'>
 									<svg
 										className='w-4 h-4 text-gray-700'
 										fill='none'
@@ -147,24 +147,18 @@ function ItemDetails() {
 					{item.sizes && item.sizes.length > 0 && (
 						<div className='mt-4'>
 							<span className='text-gray-700 font-medium'>Размер:</span>
-							<div className='flex flex-wrap gap-2 mt-2'>
-								{sizesByRow.map((row, rowIdx) => (
-									<div
-										key={rowIdx}
-										className='flex gap-2'>
-										{row.map((size, idx) => (
-											<button
-												key={idx}
-												onClick={() => setSelectedSize(size)}
-												className={`px-3 py-1.5 border rounded-md text-sm transition-all ${
-													selectedSize === size
-														? "bg-[#F86D72] text-white border-[#F86D72]"
-														: "bg-white text-gray-700 border-gray-300 hover:border-[#F86D72]"
-												}`}>
-												{size}
-											</button>
-										))}
-									</div>
+							<div className='grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2'>
+								{item.sizes.map((size, idx) => (
+									<button
+										key={idx}
+										onClick={() => setSelectedSize(size)}
+										className={`px-3 py-1.5 border rounded-md text-sm transition-all w-full ${
+											selectedSize === size
+												? "bg-[#F86D72] text-white border-[#F86D72]"
+												: "bg-white text-gray-700 border-gray-300 hover:border-[#F86D72]"
+										}`}>
+										{size}
+									</button>
 								))}
 							</div>
 						</div>
