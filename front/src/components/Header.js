@@ -118,9 +118,12 @@ function Header() {
 				{renderUserActions()}
 
 				<button
-					className='md:hidden !bg-transparent !text-black !p-0'
+					className='md:hidden items-end !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(true)}>
-					<Menu size={28} />
+					<Menu
+						className='items-end'
+						size={28}
+					/>
 				</button>
 			</div>
 
@@ -131,9 +134,12 @@ function Header() {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}>
 				<button
-					className='absolute top-5 right-0 !bg-transparent !text-black !p-0'
+					className='absolute items-end top-5 right-0 !bg-transparent !text-black !p-0'
 					onClick={() => setIsMenuOpen(false)}>
-					<X size={28} />
+					<X
+						className='items-end'
+						size={28}
+					/>
 				</button>
 
 				{navLinks.map(link => (
