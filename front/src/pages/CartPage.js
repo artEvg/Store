@@ -111,11 +111,13 @@ function CartPage() {
 					<div
 						key={item._id}
 						className='flex flex-col md:flex-row items-stretch gap-4 border rounded-lg p-3 md:p-4 shadow-sm bg-white'>
-						<img
-							src={`https://buba-backend.onrender.com/images/${item?.item?.coverImage}`}
-							className='rounded w-full md:w-24 h-32 object-cover'
-							alt={item?.item?.title}
-						/>
+						<div className='w-full md:w-24 aspect-square overflow-hidden rounded'>
+							<img
+								src={`https://buba-backend.onrender.com/images/${item?.item?.coverImage}`}
+								className='w-full h-full object-cover'
+								alt={item?.item?.title}
+							/>
+						</div>
 
 						<div className='flex-1 w-full'>
 							<h2 className='font-semibold text-base'>{item?.item?.title}</h2>
