@@ -31,11 +31,14 @@ function ItemDetails() {
     fetch(`https://buba-backend.onrender.com/items/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log("✅ item loaded:", data);
+        console.log("📦 coverImage:", data.coverImage);
+        console.log("📦 additionalImages:", data.additionalImages);
         setItem(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Ошибка при загрузке товара:", err);
+        console.error("❌ Ошибка при загрузке товара:", err);
         setLoading(false);
       });
   }, [id]);
@@ -52,6 +55,8 @@ function ItemDetails() {
   const allImages = [item.coverImage, ...(item.additionalImages || [])].filter(
     (img) => img,
   );
+
+  console.log("🖼️ allImages:", allImages, "count:", allImages.length);
 
   // Обработчики для слайдера (основной галереи)
   const handleTouchStart = (e) => {
@@ -199,150 +204,176 @@ function ItemDetails() {
     <>
       {/* Основной контент страницы */}
       <div className="mt-20 max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start bg-white shadow-md rounded-lg p-6">
-          <div className="flex justify-center w-full">
-            <div
-              onClick={() => openModal(0)}
-              className="relative w-full max-w-[500px] aspect-square cursor-zoom-in cursor-grab active:cursor-grabbing"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-            >
-              <img
-                src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
-                alt={item?.title}
-                className="w-full h-full object-cover rounded-lg shadow select-none pointer-events-none cursor-zoom-in"
-              />
-
-              {allImages.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentImageIndex((prev) =>
-                        prev === 0 ? allImages.length - 1 : prev - 1,
+        {item ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start bg-white shadow-md rounded-lg p-6">
+            <div className="flex justify-center w-full">
+              <div
+                onClick={() => {
+                  console.log(
+                    "🔥 Клик по фото! allImages.length:",
+                    allImages.length,
+                  );
+                  if (allImages.length > 0) openModal(0);
+                }}
+                className="relative w-full max-w-[500px] aspect-square cursor-zoom-in cursor-grab active:cursor-grabbing bg-gray-50 rounded-lg overflow-hidden"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+              >
+                {allImages.length > 0 ? (
+                  <img
+                    src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
+                    alt={item?.title}
+                    className="w-full h-full object-cover rounded-lg shadow select-none pointer-events-none"
+                    onError={(e) => {
+                      console.error(
+                        "⚠️ Ошибка загрузки изображения:",
+                        e.target.src,
                       );
+                      e.target.src =
+                        "https://via.placeholder.com/500x500?text=No+Image";
                     }}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
-                    aria-label="Предыдущее изображение"
-                  >
-                    <svg
-                      className="w-3.5 h-3.5 text-gray-700"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center rounded-lg bg-gray-100">
+                    <span className="text-gray-400">Нет изображений</span>
+                  </div>
+                )}
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentImageIndex((prev) =>
-                        prev === allImages.length - 1 ? 0 : prev + 1,
-                      );
-                    }}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
-                    aria-label="Следующее изображение"
-                  >
-                    <svg
-                      className="w-3.5 h-3.5 text-gray-700"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                {allImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((prev) =>
+                          prev === 0 ? allImages.length - 1 : prev - 1,
+                        );
+                      }}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
+                      aria-label="Предыдущее изображение"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        className="w-3.5 h-3.5 text-gray-700"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    </button>
 
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                    {allImages.map((_, idx) => (
-                      <div
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((prev) =>
+                          prev === allImages.length - 1 ? 0 : prev + 1,
+                        );
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
+                      aria-label="Следующее изображение"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5 text-gray-700"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                      {allImages.map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`w-1.5 h-1.5 rounded-full transition-all ${
+                            idx === currentImageIndex
+                              ? "bg-[#F86D72] scale-125"
+                              : "bg-gray-400 bg-opacity-50"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="mb-5 text-xl md:text-2xl font-semibold">
+                {item?.title}
+              </h3>
+              <p className="text-lg text-gray-600 mb-2">{item.author}</p>
+              <p className="text-gray-500 mb-4 leading-relaxed">
+                {item.description}
+              </p>
+              <p className="text-2xl font-bold text-[#F86D72] mb-2">
+                {item.price.toFixed(0)} ₽
+              </p>
+
+              <p
+                className={`font-medium ${
+                  item?.stock > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {item?.stock > 0 ? `Доступно ${item?.stock}` : "Нет в наличии"}
+              </p>
+
+              {item.sizes && item.sizes.length > 0 && (
+                <div className="mt-4">
+                  <span className="text-gray-700 font-medium">Размер:</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+                    {item.sizes.map((size, idx) => (
+                      <button
                         key={idx}
-                        className={`w-1.5 h-1.5 rounded-full transition-all ${
-                          idx === currentImageIndex
-                            ? "bg-[#F86D72] scale-125"
-                            : "bg-gray-400 bg-opacity-50"
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-3 py-1.5 border rounded-md text-sm transition-all w-full ${
+                          selectedSize === size
+                            ? "bg-[#F86D72] text-white border-[#F86D72]"
+                            : "bg-white text-gray-700 border-gray-300 hover:border-[#F86D72]"
                         }`}
-                      />
+                      >
+                        {size}
+                      </button>
                     ))}
                   </div>
-                </>
+                </div>
+              )}
+
+              <button
+                onClick={handleAddToCart}
+                disabled={!item || item.stock === 0}
+                className="mt-7 whitespace-nowrap w-44 disabled:bg-gray-400 disabled:cursor-not-allowed bg-[#F86D72] text-white font-medium py-2 px-4 rounded-md transition-colors shadow-md hover:bg-[#E55A5F]"
+              >
+                {item?.stock === 0 ? "Нет в наличии" : "Добавить в корзину"}
+              </button>
+
+              {message && (
+                <div className="mt-4 p-3 rounded bg-green-100 text-green-700 text-center">
+                  {message}
+                </div>
               )}
             </div>
           </div>
-
-          <div>
-            <h3 className="mb-5 text-xl md:text-2xl font-semibold">
-              {item?.title}
-            </h3>
-            <p className="text-lg text-gray-600 mb-2">{item.author}</p>
-            <p className="text-gray-500 mb-4 leading-relaxed">
-              {item.description}
-            </p>
-            <p className="text-2xl font-bold text-[#F86D72] mb-2">
-              {item.price.toFixed(0)} ₽
-            </p>
-
-            <p
-              className={`font-medium ${
-                item?.stock > 0 ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {item?.stock > 0 ? `Доступно ${item?.stock}` : "Нет в наличии"}
-            </p>
-
-            {item.sizes && item.sizes.length > 0 && (
-              <div className="mt-4">
-                <span className="text-gray-700 font-medium">Размер:</span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-                  {item.sizes.map((size, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-3 py-1.5 border rounded-md text-sm transition-all w-full ${
-                        selectedSize === size
-                          ? "bg-[#F86D72] text-white border-[#F86D72]"
-                          : "bg-white text-gray-700 border-gray-300 hover:border-[#F86D72]"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={handleAddToCart}
-              disabled={!item || item.stock === 0}
-              className="mt-7 whitespace-nowrap w-44 disabled:bg-gray-400 disabled:cursor-not-allowed bg-[#F86D72] text-white font-medium py-2 px-4 rounded-md transition-colors shadow-md hover:bg-[#E55A5F]"
-            >
-              {item?.stock === 0 ? "Нет в наличии" : "Добавить в корзину"}
-            </button>
-
-            {message && (
-              <div className="mt-4 p-3 rounded bg-green-100 text-green-700 text-center">
-                {message}
-              </div>
-            )}
+        ) : (
+          <div className="mt-44 text-center">
+            <p className="text-xl text-gray-500">Товар не найден</p>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Модальное окно для увеличенного просмотра изображения */}
