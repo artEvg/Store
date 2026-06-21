@@ -1,4 +1,3 @@
-// front/src/components/FeaturedProducts.js
 import React, { useEffect, useState } from "react";
 import { useCart } from "../auth/CartContext";
 import { Link } from "react-router-dom";
@@ -9,7 +8,6 @@ function FeaturedProducts() {
   const [message, setMessage] = useState("");
   const { addToCart } = useCart();
 
-  // Пагинация
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 6;
 
@@ -20,7 +18,6 @@ function FeaturedProducts() {
       .catch((err) => console.error("Error fetching items:", err));
   }, []);
 
-  // Фильтрация по запросу (как и раньше)
   const filteredItems =
     searchQuery.trim() === ""
       ? itemList
@@ -28,7 +25,6 @@ function FeaturedProducts() {
           item.title?.toLowerCase().includes(searchQuery.toLowerCase()),
         );
 
-  // Расчет пагинации для отфильтрованных товаров
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedItems = filteredItems.slice(
@@ -36,20 +32,17 @@ function FeaturedProducts() {
     startIndex + ITEMS_PER_PAGE,
   );
 
-  // Обработчик смены страницы
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
-  // Сброс на первую страницу при изменении поиска
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
 
   return (
     <div className="mt-10">
-      {/* Поле ввода поиска */}
       <div className="mb-4">
         <input
           type="text"
@@ -82,8 +75,11 @@ function FeaturedProducts() {
                 <div className="w-full aspect-square overflow-hidden rounded-lg">
                   <img
                     className="w-full h-full object-cover"
-                    src={`https://buba-backend.onrender.com/images/${item.coverImage}`}
+                    src={item.coverImage || "/placeholder.jpg"} // ← ИСПРАВЛЕНО
                     alt={item.title}
+                    onError={(e) => {
+                      e.target.src = "/placeholder.jpg";
+                    }}
                   />
                 </div>
                 <h6 className="text-center my-3 min-h-[20px] line-clamp-2">
@@ -92,21 +88,17 @@ function FeaturedProducts() {
               </Link>
 
               <span className="text-gray-400">{item?.author}</span>
-
               <strong className="text-[#F86D72]">
                 {item?.price.toFixed(0)} ₽
               </strong>
-
               <div className="text-sm text-gray-500">Остаток: {item.stock}</div>
             </div>
           ))
         )}
       </div>
 
-      {/* Пагинацияяяяя */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-6">
-          {/* Кнопка "Назад" */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -114,8 +106,6 @@ function FeaturedProducts() {
           >
             ←
           </button>
-
-          {/* Страницы */}
           {[...Array(totalPages)].map((_, i) => {
             const page = i + 1;
             return (
@@ -132,8 +122,6 @@ function FeaturedProducts() {
               </button>
             );
           })}
-
-          {/* Кнопка "Вперед" */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}

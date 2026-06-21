@@ -59,7 +59,7 @@ function ItemDetails() {
 
   // Все изображения
   const allImages = [item.coverImage, ...(item.additionalImages || [])].filter(
-    (img) => img,
+    Boolean,
   );
 
   // ===== Обработчики для основной галереи =====
@@ -293,14 +293,10 @@ function ItemDetails() {
               >
                 {allImages.length > 0 ? (
                   <img
-                    src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
+                    src={allImages[currentImageIndex]} // ← ИСПРАВЛЕНО (было с /images/)
                     alt={item?.title}
                     className="w-full h-full object-cover rounded-lg shadow pointer-events-none"
                     onError={(e) => {
-                      console.error(
-                        "⚠️ Ошибка загрузки изображения:",
-                        e.target.src,
-                      );
                       e.target.src =
                         "https://via.placeholder.com/500x500?text=No+Image";
                     }}
@@ -487,7 +483,7 @@ function ItemDetails() {
             </button>
 
             <img
-              src={`https://buba-backend.onrender.com/images/${allImages[modalImageIndex]}`}
+              src={allImages[modalImageIndex]} // ← ИСПРАВЛЕНО
               alt={item?.title}
               className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl pointer-events-none"
               onError={(e) => {
