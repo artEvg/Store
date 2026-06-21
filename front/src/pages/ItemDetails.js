@@ -15,25 +15,18 @@ function ItemDetails() {
 
   const { addToCart } = useCart();
 
-  // Реф для контейнера изображений (для слайдера)
-  const imageContainerRef = useRef(null);
-
-  // Состояния для слайдера
-  const [touchStart, setTouchStart] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState(null);
-
   // Состояния для модального окна
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
+
+  // Порог для различения клика и перетаскивания (в пикселях)
+  const SWIPE_THRESHOLD = 10;
 
   useEffect(() => {
     fetch(`https://buba-backend.onrender.com/items/${id}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("✅ item loaded:", data);
-        console.log("📦 coverImage:", data.coverImage);
-        console.log("📦 additionalImages:", data.additionalImages);
         setItem(data);
         setLoading(false);
       })
@@ -51,67 +44,122 @@ function ItemDetails() {
     );
   }
 
-  // Получаем все изображения (coverImage + additionalImages)
+  // Все изображения
   const allImages = [item.coverImage, ...(item.additionalImages || [])].filter(
     (img) => img,
   );
 
-  console.log("🖼️ allImages:", allImages, "count:", allImages.length);
+  // ===== Обработчики для основной галереи =====
+  const galleryTouchStart = useRef(null);
+  const galleryTouchStartY = useRef(null);
+  const galleryMouseStartX = useRef(null);
+  const galleryMouseStartY = useRef(null);
+  const isSwiping = useRef(false);
 
-  // Обработчики для слайдера (основной галереи)
-  const handleTouchStart = (e) => {
-    setTouchStart(e.targetTouches[0].clientX);
-    setIsDragging(true);
+  // --- Touch события ---
+  const handleGalleryTouchStart = (e) => {
+    const touch = e.targetTouches[0];
+    galleryTouchStart.current = touch.clientX;
+    galleryTouchStartY.current = touch.clientY;
+    isSwiping.current = false;
   };
 
-  const handleTouchMove = (e) => {
-    if (!touchStart) return;
-    const delta = touchStart - e.targetTouches[0].clientX;
-    if (Math.abs(delta) > 50) {
-      if (delta > 0)
+  const handleGalleryTouchMove = (e) => {
+    if (galleryTouchStart.current === null) return;
+    const deltaX = galleryTouchStart.current - e.targetTouches[0].clientX;
+    const deltaY = galleryTouchStartY.current - e.targetTouches[0].clientY;
+    // Если движение значительное, считаем свайпом
+    if (
+      Math.abs(deltaX) > SWIPE_THRESHOLD ||
+      Math.abs(deltaY) > SWIPE_THRESHOLD
+    ) {
+      isSwiping.current = true;
+    }
+    // Переключение слайда при горизонтальном свайпе
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX > 0) {
         setCurrentImageIndex((prev) =>
           prev === allImages.length - 1 ? 0 : prev + 1,
         );
-      else
+      } else {
         setCurrentImageIndex((prev) =>
           prev === 0 ? allImages.length - 1 : prev - 1,
         );
-      setTouchStart(null);
+      }
+      galleryTouchStart.current = null; // сброс, чтобы не срабатывало повторно
+      galleryTouchStartY.current = null;
     }
   };
 
-  const handleTouchEnd = () => {
-    setTouchStart(null);
-    setIsDragging(false);
+  const handleGalleryTouchEnd = () => {
+    // Если не было свайпа и есть изображения – открываем модалку
+    if (!isSwiping.current && allImages.length > 0) {
+      openModal(0);
+    }
+    galleryTouchStart.current = null;
+    galleryTouchStartY.current = null;
+    isSwiping.current = false;
   };
 
-  const handleMouseDown = (e) => {
-    setDragStart(e.clientX);
-    setIsDragging(true);
+  // --- Mouse события ---
+  const handleGalleryMouseDown = (e) => {
+    galleryMouseStartX.current = e.clientX;
+    galleryMouseStartY.current = e.clientY;
+    isSwiping.current = false;
   };
 
-  const handleMouseMove = (e) => {
-    if (!dragStart || !isDragging) return;
-    const delta = dragStart - e.clientX;
-    if (Math.abs(delta) > 50) {
-      if (delta > 0)
+  const handleGalleryMouseMove = (e) => {
+    if (galleryMouseStartX.current === null) return;
+    const deltaX = galleryMouseStartX.current - e.clientX;
+    const deltaY = galleryMouseStartY.current - e.clientY;
+    if (
+      Math.abs(deltaX) > SWIPE_THRESHOLD ||
+      Math.abs(deltaY) > SWIPE_THRESHOLD
+    ) {
+      isSwiping.current = true;
+    }
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX > 0) {
         setCurrentImageIndex((prev) =>
           prev === allImages.length - 1 ? 0 : prev + 1,
         );
-      else
+      } else {
         setCurrentImageIndex((prev) =>
           prev === 0 ? allImages.length - 1 : prev - 1,
         );
-      setDragStart(null);
+      }
+      galleryMouseStartX.current = null;
+      galleryMouseStartY.current = null;
     }
   };
 
-  const handleMouseUp = () => {
-    setDragStart(null);
-    setIsDragging(false);
+  const handleGalleryMouseUp = (e) => {
+    // Если не было движения (клик) – открываем модалку
+    if (!isSwiping.current && allImages.length > 0) {
+      // Проверяем, что кнопка мыши отпущена на том же элементе (чтобы не сработало при выносе)
+      const rect = e.currentTarget.getBoundingClientRect();
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      if (isInside) {
+        openModal(0);
+      }
+    }
+    galleryMouseStartX.current = null;
+    galleryMouseStartY.current = null;
+    isSwiping.current = false;
   };
 
-  // Обработчики для модального окна
+  const handleGalleryMouseLeave = () => {
+    // Сбрасываем, чтобы при выносе мыши не открывалась модалка
+    galleryMouseStartX.current = null;
+    galleryMouseStartY.current = null;
+    isSwiping.current = false;
+  };
+
+  // ===== Обработчики для модального окна =====
   const openModal = (index) => {
     setModalImageIndex(index);
     setIsModalOpen(true);
@@ -122,62 +170,99 @@ function ItemDetails() {
     setModalImageIndex(0);
   };
 
-  const handlePrevModalImage = () => {
+  const handlePrevModalImage = (e) => {
+    if (e) e.stopPropagation();
     setModalImageIndex((prev) =>
       prev === 0 ? allImages.length - 1 : prev - 1,
     );
   };
 
-  const handleNextModalImage = () => {
+  const handleNextModalImage = (e) => {
+    if (e) e.stopPropagation();
     setModalImageIndex((prev) =>
       prev === allImages.length - 1 ? 0 : prev + 1,
     );
   };
 
+  // Обработчики для модального окна (свайп + клик по изображению закрывает? нет, лучше не закрывать при клике, оставим как есть)
+  // Но добавим различение клика и свайпа для модалки, чтобы при перетаскивании не закрывалось.
   const modalTouchStart = useRef(null);
-  const modalIsDragging = useRef(false);
-  const modalDragStart = useRef(null);
+  const modalTouchStartY = useRef(null);
+  const modalMouseStartX = useRef(null);
+  const modalMouseStartY = useRef(null);
+  const modalIsSwiping = useRef(false);
 
   const handleModalTouchStart = (e) => {
-    modalTouchStart.current = e.targetTouches[0].clientX;
-    modalIsDragging.current = true;
+    const touch = e.targetTouches[0];
+    modalTouchStart.current = touch.clientX;
+    modalTouchStartY.current = touch.clientY;
+    modalIsSwiping.current = false;
   };
 
   const handleModalTouchMove = (e) => {
     if (modalTouchStart.current === null) return;
-    const delta = modalTouchStart.current - e.targetTouches[0].clientX;
-    if (Math.abs(delta) > 50) {
-      if (delta > 0) handleNextModalImage();
+    const deltaX = modalTouchStart.current - e.targetTouches[0].clientX;
+    const deltaY = modalTouchStartY.current - e.targetTouches[0].clientY;
+    if (
+      Math.abs(deltaX) > SWIPE_THRESHOLD ||
+      Math.abs(deltaY) > SWIPE_THRESHOLD
+    ) {
+      modalIsSwiping.current = true;
+    }
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX > 0) handleNextModalImage();
       else handlePrevModalImage();
       modalTouchStart.current = null;
+      modalTouchStartY.current = null;
     }
   };
 
   const handleModalTouchEnd = () => {
+    // Если не свайп и клик внутри изображения – ничего не делаем, оставляем открытым
+    // Но если хотите закрывать по клику на пустое место – это обрабатывается на внешнем оверлее
     modalTouchStart.current = null;
-    modalIsDragging.current = false;
+    modalTouchStartY.current = null;
+    modalIsSwiping.current = false;
   };
 
   const handleModalMouseDown = (e) => {
-    modalDragStart.current = e.clientX;
-    modalIsDragging.current = true;
+    modalMouseStartX.current = e.clientX;
+    modalMouseStartY.current = e.clientY;
+    modalIsSwiping.current = false;
   };
 
   const handleModalMouseMove = (e) => {
-    if (modalDragStart.current === null || !modalIsDragging.current) return;
-    const delta = modalDragStart.current - e.clientX;
-    if (Math.abs(delta) > 50) {
-      if (delta > 0) handleNextModalImage();
+    if (modalMouseStartX.current === null) return;
+    const deltaX = modalMouseStartX.current - e.clientX;
+    const deltaY = modalMouseStartY.current - e.clientY;
+    if (
+      Math.abs(deltaX) > SWIPE_THRESHOLD ||
+      Math.abs(deltaY) > SWIPE_THRESHOLD
+    ) {
+      modalIsSwiping.current = true;
+    }
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX > 0) handleNextModalImage();
       else handlePrevModalImage();
-      modalDragStart.current = null;
+      modalMouseStartX.current = null;
+      modalMouseStartY.current = null;
     }
   };
 
-  const handleModalMouseUp = () => {
-    modalDragStart.current = null;
-    modalIsDragging.current = false;
+  const handleModalMouseUp = (e) => {
+    // Если не было свайпа, ничего не делаем (не закрываем)
+    modalMouseStartX.current = null;
+    modalMouseStartY.current = null;
+    modalIsSwiping.current = false;
   };
 
+  const handleModalMouseLeave = () => {
+    modalMouseStartX.current = null;
+    modalMouseStartY.current = null;
+    modalIsSwiping.current = false;
+  };
+
+  // ===== Корзина =====
   const handleAddToCart = () => {
     if (!user) {
       setMessage("Пожалуйста, авторизуйтесь/зарегистрируйтесь");
@@ -200,35 +285,29 @@ function ItemDetails() {
     );
   };
 
+  // ===== Рендер =====
   return (
     <>
-      {/* Основной контент страницы */}
       <div className="mt-20 max-w-6xl mx-auto px-6">
         {item ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start bg-white shadow-md rounded-lg p-6">
+            {/* Галерея */}
             <div className="flex justify-center w-full">
               <div
-                onClick={() => {
-                  console.log(
-                    "🔥 Клик по фото! allImages.length:",
-                    allImages.length,
-                  );
-                  if (allImages.length > 0) openModal(0);
-                }}
-                className="relative w-full max-w-[500px] aspect-square cursor-zoom-in cursor-grab active:cursor-grabbing bg-gray-50 rounded-lg overflow-hidden"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                className="relative w-full max-w-[500px] aspect-square cursor-zoom-in bg-gray-50 rounded-lg overflow-hidden select-none"
+                onTouchStart={handleGalleryTouchStart}
+                onTouchMove={handleGalleryTouchMove}
+                onTouchEnd={handleGalleryTouchEnd}
+                onMouseDown={handleGalleryMouseDown}
+                onMouseMove={handleGalleryMouseMove}
+                onMouseUp={handleGalleryMouseUp}
+                onMouseLeave={handleGalleryMouseLeave}
               >
                 {allImages.length > 0 ? (
                   <img
                     src={`https://buba-backend.onrender.com/images/${allImages[currentImageIndex]}`}
                     alt={item?.title}
-                    className="w-full h-full object-cover rounded-lg shadow select-none pointer-events-none"
+                    className="w-full h-full object-cover rounded-lg shadow pointer-events-none"
                     onError={(e) => {
                       console.error(
                         "⚠️ Ошибка загрузки изображения:",
@@ -244,6 +323,7 @@ function ItemDetails() {
                   </div>
                 )}
 
+                {/* Стрелки и индикаторы (если >1 изображения) */}
                 {allImages.length > 1 && (
                   <>
                     <button
@@ -254,7 +334,7 @@ function ItemDetails() {
                         );
                       }}
                       className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
-                      aria-label="Предыдущее изображение"
+                      aria-label="Предыдущее"
                     >
                       <svg
                         className="w-3.5 h-3.5 text-gray-700"
@@ -270,7 +350,6 @@ function ItemDetails() {
                         />
                       </svg>
                     </button>
-
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -279,7 +358,7 @@ function ItemDetails() {
                         );
                       }}
                       className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center bg-gray-300/50 hover:bg-gray-400/70 rounded-full transition-colors opacity-70"
-                      aria-label="Следующее изображение"
+                      aria-label="Следующее"
                     >
                       <svg
                         className="w-3.5 h-3.5 text-gray-700"
@@ -295,8 +374,7 @@ function ItemDetails() {
                         />
                       </svg>
                     </button>
-
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 pointer-events-none">
                       {allImages.map((_, idx) => (
                         <div
                           key={idx}
@@ -313,6 +391,7 @@ function ItemDetails() {
               </div>
             </div>
 
+            {/* Информация о товаре */}
             <div>
               <h3 className="mb-5 text-xl md:text-2xl font-semibold">
                 {item?.title}
@@ -324,7 +403,6 @@ function ItemDetails() {
               <p className="text-2xl font-bold text-[#F86D72] mb-2">
                 {item.price.toFixed(0)} ₽
               </p>
-
               <p
                 className={`font-medium ${
                   item?.stock > 0 ? "text-green-600" : "text-red-600"
@@ -376,11 +454,11 @@ function ItemDetails() {
         )}
       </div>
 
-      {/* Модальное окно для увеличенного просмотра изображения */}
+      {/* Модальное окно */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
-          onClick={closeModal}
+          onClick={closeModal} // закрытие по клику на оверлей
         >
           <button
             onClick={closeModal}
@@ -392,19 +470,19 @@ function ItemDetails() {
 
           <div
             className="relative max-w-5xl max-h-[90vh] w-full flex flex-col items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} // не даем закрыться при клике внутри
             onTouchStart={handleModalTouchStart}
             onTouchMove={handleModalTouchMove}
             onTouchEnd={handleModalTouchEnd}
             onMouseDown={handleModalMouseDown}
             onMouseMove={handleModalMouseMove}
             onMouseUp={handleModalMouseUp}
-            onMouseLeave={handleModalMouseUp}
+            onMouseLeave={handleModalMouseLeave}
           >
             <button
               onClick={handlePrevModalImage}
               className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-gray-800/50 hover:bg-gray-700/70 rounded-full transition-colors text-white"
-              aria-label="Предыдущее изображение"
+              aria-label="Предыдущее"
             >
               <svg
                 className="w-6 h-6"
@@ -424,13 +502,17 @@ function ItemDetails() {
             <img
               src={`https://buba-backend.onrender.com/images/${allImages[modalImageIndex]}`}
               alt={item?.title}
-              className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl"
+              className="max-w-full max-h-[80vh] object-contain rounded shadow-2xl pointer-events-none"
+              onError={(e) => {
+                e.target.src =
+                  "https://via.placeholder.com/500x500?text=No+Image";
+              }}
             />
 
             <button
               onClick={handleNextModalImage}
               className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-gray-800/50 hover:bg-gray-700/70 rounded-full transition-colors text-white"
-              aria-label="Следующее изображение"
+              aria-label="Следующее"
             >
               <svg
                 className="w-6 h-6"
@@ -457,7 +539,7 @@ function ItemDetails() {
                       : "bg-white bg-opacity-50 hover:bg-opacity-70"
                   }`}
                   onClick={() => setModalImageIndex(idx)}
-                  aria-label={`Перейти к изображению ${idx + 1}`}
+                  aria-label={`Перейти к ${idx + 1}`}
                 />
               ))}
             </div>
