@@ -87,7 +87,7 @@ function Header() {
     >
       <Link to="/" className="flex items-center shrink-0">
         <h3 className="text-3xl font-extrabold text-[#F86D72] tracking-wider uppercase m-0 before:hidden">
-          PIDORAS
+          BUBA STORE
         </h3>
       </Link>
 
@@ -126,9 +126,10 @@ function Header() {
 
       <div
         className={`
-          fixed top-0 left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-6
+          fixed top-0 left-0 w-full h-screen bg-white flex flex-col items-center justify-start gap-6
           transition-all duration-300
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
+          pt-24
         `}
       >
         <button
