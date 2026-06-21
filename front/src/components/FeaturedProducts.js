@@ -60,7 +60,7 @@ function FeaturedProducts() {
         />
       </div>
 
-      <h3 className="my-6">Товары</h3>
+      <h3 className="my-6">Каталог</h3>
       {message && (
         <div className="mb-4 p-3 rounded bg-green-100 text-green-700 text-center">
           {message}
