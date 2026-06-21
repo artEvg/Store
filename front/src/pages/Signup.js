@@ -34,21 +34,25 @@ function Signup() {
       <h1 className="text-2xl font-bold mb-6 text-center">Регистрация</h1>
       <form onSubmit={onSubmit} className="space-y-4">
         <input
-          className="w-full border p-2 rounded mb-6"
+          className="w-full border p-2 rounded"
           placeholder="Имя"
+          name="name"
           value={form.name}
           onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
         />
         <input
-          className="w-full border p-2 rounded mb-6"
+          className="w-full border p-2 rounded"
           placeholder="Почта"
+          name="email"
+          type="email"
           value={form.email}
           onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
         />
         <input
-          className="w-full border p-2 rounded mb-6"
+          className="w-full border p-2 rounded"
           placeholder="Пароль"
           type="password"
+          name="password"
           value={form.password}
           onChange={(e) => setForm((s) => ({ ...s, password: e.target.value }))}
         />
