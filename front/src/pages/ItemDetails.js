@@ -12,8 +12,20 @@ function ItemDetails() {
   const [message, setMessage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const { addToCart } = useCart();
+
+  // ---- Все useRef вынесены в самое начало (до любого условного возврата) ----
+  const galleryTouchStart = useRef(null);
+  const galleryTouchStartY = useRef(null);
+  const galleryMouseStartX = useRef(null);
+  const galleryMouseStartY = useRef(null);
+  const isSwiping = useRef(false);
+
+  const modalTouchStart = useRef(null);
+  const modalTouchStartY = useRef(null);
+  const modalMouseStartX = useRef(null);
+  const modalMouseStartY = useRef(null);
+  const modalIsSwiping = useRef(false);
 
   // Состояния для модального окна
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +48,7 @@ function ItemDetails() {
       });
   }, [id]);
 
+  // ---- Ранний возврат ТОЛЬКО ПОСЛЕ всех хуков ----
   if (loading) {
     return (
       <div className="flex justify-center items-center mt-44">
@@ -50,13 +63,6 @@ function ItemDetails() {
   );
 
   // ===== Обработчики для основной галереи =====
-  const galleryTouchStart = useRef(null);
-  const galleryTouchStartY = useRef(null);
-  const galleryMouseStartX = useRef(null);
-  const galleryMouseStartY = useRef(null);
-  const isSwiping = useRef(false);
-
-  // --- Touch события ---
   const handleGalleryTouchStart = (e) => {
     const touch = e.targetTouches[0];
     galleryTouchStart.current = touch.clientX;
@@ -68,14 +74,12 @@ function ItemDetails() {
     if (galleryTouchStart.current === null) return;
     const deltaX = galleryTouchStart.current - e.targetTouches[0].clientX;
     const deltaY = galleryTouchStartY.current - e.targetTouches[0].clientY;
-    // Если движение значительное, считаем свайпом
     if (
       Math.abs(deltaX) > SWIPE_THRESHOLD ||
       Math.abs(deltaY) > SWIPE_THRESHOLD
     ) {
       isSwiping.current = true;
     }
-    // Переключение слайда при горизонтальном свайпе
     if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
       if (deltaX > 0) {
         setCurrentImageIndex((prev) =>
@@ -86,13 +90,12 @@ function ItemDetails() {
           prev === 0 ? allImages.length - 1 : prev - 1,
         );
       }
-      galleryTouchStart.current = null; // сброс, чтобы не срабатывало повторно
+      galleryTouchStart.current = null;
       galleryTouchStartY.current = null;
     }
   };
 
   const handleGalleryTouchEnd = () => {
-    // Если не было свайпа и есть изображения – открываем модалку
     if (!isSwiping.current && allImages.length > 0) {
       openModal(0);
     }
@@ -101,7 +104,6 @@ function ItemDetails() {
     isSwiping.current = false;
   };
 
-  // --- Mouse события ---
   const handleGalleryMouseDown = (e) => {
     galleryMouseStartX.current = e.clientX;
     galleryMouseStartY.current = e.clientY;
@@ -134,9 +136,7 @@ function ItemDetails() {
   };
 
   const handleGalleryMouseUp = (e) => {
-    // Если не было движения (клик) – открываем модалку
     if (!isSwiping.current && allImages.length > 0) {
-      // Проверяем, что кнопка мыши отпущена на том же элементе (чтобы не сработало при выносе)
       const rect = e.currentTarget.getBoundingClientRect();
       const isInside =
         e.clientX >= rect.left &&
@@ -153,7 +153,6 @@ function ItemDetails() {
   };
 
   const handleGalleryMouseLeave = () => {
-    // Сбрасываем, чтобы при выносе мыши не открывалась модалка
     galleryMouseStartX.current = null;
     galleryMouseStartY.current = null;
     isSwiping.current = false;
@@ -184,14 +183,6 @@ function ItemDetails() {
     );
   };
 
-  // Обработчики для модального окна (свайп + клик по изображению закрывает? нет, лучше не закрывать при клике, оставим как есть)
-  // Но добавим различение клика и свайпа для модалки, чтобы при перетаскивании не закрывалось.
-  const modalTouchStart = useRef(null);
-  const modalTouchStartY = useRef(null);
-  const modalMouseStartX = useRef(null);
-  const modalMouseStartY = useRef(null);
-  const modalIsSwiping = useRef(false);
-
   const handleModalTouchStart = (e) => {
     const touch = e.targetTouches[0];
     modalTouchStart.current = touch.clientX;
@@ -218,8 +209,6 @@ function ItemDetails() {
   };
 
   const handleModalTouchEnd = () => {
-    // Если не свайп и клик внутри изображения – ничего не делаем, оставляем открытым
-    // Но если хотите закрывать по клику на пустое место – это обрабатывается на внешнем оверлее
     modalTouchStart.current = null;
     modalTouchStartY.current = null;
     modalIsSwiping.current = false;
@@ -250,7 +239,6 @@ function ItemDetails() {
   };
 
   const handleModalMouseUp = (e) => {
-    // Если не было свайпа, ничего не делаем (не закрываем)
     modalMouseStartX.current = null;
     modalMouseStartY.current = null;
     modalIsSwiping.current = false;
@@ -323,7 +311,6 @@ function ItemDetails() {
                   </div>
                 )}
 
-                {/* Стрелки и индикаторы (если >1 изображения) */}
                 {allImages.length > 1 && (
                   <>
                     <button
@@ -458,7 +445,7 @@ function ItemDetails() {
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
-          onClick={closeModal} // закрытие по клику на оверлей
+          onClick={closeModal}
         >
           <button
             onClick={closeModal}
@@ -470,7 +457,7 @@ function ItemDetails() {
 
           <div
             className="relative max-w-5xl max-h-[90vh] w-full flex flex-col items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // не даем закрыться при клике внутри
+            onClick={(e) => e.stopPropagation()}
             onTouchStart={handleModalTouchStart}
             onTouchMove={handleModalTouchMove}
             onTouchEnd={handleModalTouchEnd}
