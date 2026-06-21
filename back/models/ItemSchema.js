@@ -1,78 +1,78 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const ItemSchema = new mongoose.Schema({
-	title: {
-		type: String,
-		require: true,
-	},
-	author: {
-		type: String,
-		require: true,
-	},
+  title: {
+    type: String,
+    require: true,
+  },
+  author: {
+    type: String,
+    require: true,
+  },
 
-	description: {
-		type: String,
-		require: true,
-	},
+  description: {
+    type: String,
+    require: true,
+  },
 
-	price: {
-		type: Number,
-		require: true,
-	},
+  price: {
+    type: Number,
+    require: true,
+  },
 
-	stock: {
-		type: Number,
-		require: true,
-		default: 0,
-	},
+  stock: {
+    type: Number,
+    require: true,
+    default: 0,
+  },
 
-	sizes: {
-		type: [String],
-		default: [],
-	},
+  sizes: {
+    type: [String],
+    default: [],
+  },
 
-	isFeatured: {
-		type: Boolean,
-		default: false,
-	},
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
 
-	isOnSale: {
-		type: Boolean,
-		default: false,
-	},
+  isOnSale: {
+    type: Boolean,
+    default: false,
+  },
 
-	discountPercent: {
-		type: Number,
-		default: 0,
-		set: function (value) {
-			if (
-				value === "false" ||
-				value === false ||
-				value === null ||
-				value === undefined
-			) {
-				return 0
-			}
-			if (value === "true" || value === true) {
-				return 100
-			}
-			return Number(value) || 0
-		},
-	},
+  discountPercent: {
+    type: Number,
+    default: 0,
+    set: function (value) {
+      if (
+        value === "false" ||
+        value === false ||
+        value === null ||
+        value === undefined
+      ) {
+        return 0;
+      }
+      if (value === "true" || value === true) {
+        return 100;
+      }
+      return Number(value) || 0;
+    },
+  },
 
-	category: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Category",
-	},
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+  },
 
-	coverImage: {
-		type: String,
-	},
+  coverImage: {
+    type: String,
+  },
 
-	additionalImages: {
-		type: [String],
-		default: [],
-	},
-})
+  additionalImages: {
+    type: [String],
+    default: [],
+  },
+});
 
-module.exports = mongoose.model("Item", ItemSchema)
+module.exports = mongoose.model("Item", ItemSchema);
