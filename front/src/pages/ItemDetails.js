@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../auth/CartContext";
+import { useAuth } from "../auth/AuthContext"; // ← добавляем импорт
 
 function ItemDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth(); // ← получаем user из AuthContext
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const { addToCart } = useCart();
+  const { addToCart } = useCart(); // ← cart нужен только для addToCart
 
   useEffect(() => {
     fetch(`https://buba-backend.onrender.com/items/${id}`)
