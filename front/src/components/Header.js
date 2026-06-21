@@ -87,7 +87,7 @@ function Header() {
     >
       <Link to="/" className="flex items-center shrink-0">
         <h3 className="text-3xl font-extrabold text-[#F86D72] tracking-wider uppercase m-0 before:hidden">
-          BUBA STORE
+          BUBA
         </h3>
       </Link>
 

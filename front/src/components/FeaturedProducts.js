@@ -75,7 +75,7 @@ function FeaturedProducts() {
                 <div className="w-full aspect-square overflow-hidden rounded-lg">
                   <img
                     className="w-full h-full object-cover"
-                    src={item.coverImage || "/placeholder.jpg"} // ← ИСПРАВЛЕНО
+                    src={item.coverImage || "/placeholder.jpg"}
                     alt={item.title}
                     onError={(e) => {
                       e.target.src = "/placeholder.jpg";
@@ -89,7 +89,7 @@ function FeaturedProducts() {
 
               <span className="text-gray-400">{item?.author}</span>
               <strong className="text-[#F86D72]">
-                {item?.price.toFixed(0)} ₽
+                {item?.price?.toFixed(0) || 0} ₽
               </strong>
               <div className="text-sm text-gray-500">Остаток: {item.stock}</div>
             </div>
@@ -97,22 +97,28 @@ function FeaturedProducts() {
         )}
       </div>
 
+      {/* АДАПТИВНАЯ ПАГИНАЦИЯ — НЕ ВЫПИРАЕТ ПО БОКАМ */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-6">
+        <div className="flex flex-wrap justify-center items-center gap-1 sm:gap-2 mt-6 max-w-full overflow-x-auto">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-3 py-1 rounded ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+            className={`px-2 py-1 sm:px-3 sm:py-1 text-sm sm:text-base rounded ${
+              currentPage === 1
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-200"
+            }`}
           >
             ←
           </button>
+
           {[...Array(totalPages)].map((_, i) => {
             const page = i + 1;
             return (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded ${
+                className={`px-2 py-1 sm:px-3 sm:py-1 text-sm sm:text-base rounded min-w-[30px] ${
                   currentPage === page
                     ? "bg-[#F86D72] text-white"
                     : "hover:bg-gray-200"
@@ -122,10 +128,15 @@ function FeaturedProducts() {
               </button>
             );
           })}
+
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+            className={`px-2 py-1 sm:px-3 sm:py-1 text-sm sm:text-base rounded ${
+              currentPage === totalPages
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-200"
+            }`}
           >
             →
           </button>
