@@ -103,7 +103,7 @@ function FeaturedProducts() {
         )}
       </div>
 
-      {/* Пагинация */}
+      {/* Пагинацияяяяя */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-6">
           {/* Кнопка "Назад" */}
