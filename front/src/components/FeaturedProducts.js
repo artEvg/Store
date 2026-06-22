@@ -97,21 +97,9 @@ function FeaturedProducts() {
         )}
       </div>
 
-      {/* АДАПТИВНАЯ ПАГИНАЦИЯ — НЕ ВЫПИРАЕТ ПО БОКАМ */}
+      {/* Пагинация без стрелок — только номера страниц */}
       {totalPages > 1 && (
         <div className="flex flex-wrap justify-center items-center gap-1 sm:gap-2 mt-6 max-w-full overflow-x-auto">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`px-2 py-1 sm:px-3 sm:py-1 text-sm sm:text-base rounded ${
-              currentPage === 1
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-200"
-            }`}
-          >
-            ←
-          </button>
-
           {[...Array(totalPages)].map((_, i) => {
             const page = i + 1;
             return (
@@ -128,18 +116,6 @@ function FeaturedProducts() {
               </button>
             );
           })}
-
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`px-2 py-1 sm:px-3 sm:py-1 text-sm sm:text-base rounded ${
-              currentPage === totalPages
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-200"
-            }`}
-          >
-            →
-          </button>
         </div>
       )}
     </div>
